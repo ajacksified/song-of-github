@@ -32,7 +32,7 @@ app.get('/', function(req, res){
   if(req.query.username){
     https.get('https://github.com/users/' + req.query.username + '/contributions_calendar_data', function(response) {
       response.on('data', function(d){
-        res.render('index', { calendarData: d });
+        res.render('index', { calendarData: d, name: req.query.username });
       });
     });
   }else{

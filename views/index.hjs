@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns = "http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns = 'http://www.w3.org/1999/xhtml'>
   <head>
     <title>Song of Github - Let me sing you the song of my contributions.</title>
 
@@ -8,143 +8,61 @@
   </head>
 
   <body>
-    <section id="main">
+    <section id='main'>
       <h1>Song of Github</h1>
       <h2>Let me sing you the song of my contributions.</h2>
 
       <p>(Sound on, please.)</p>
 
-      <form action="/" method="GET">
-        <label for="username">Github username:</label>
-        <input name="username" />
-        <button type="submit">Play that sassy jazz</button>
+      <form action='/' method='GET'>
+        <label for='username'>Github username:</label>
+        <input name='username' value='{{name}}' />
+        <button type='submit'>Play that sassy jazz</button>
       </form>
 
-      <table id="visualize">
-        <tr id="day0"></tr>
-        <tr id="day1"></tr>
-        <tr id="day2"></tr>
-        <tr id="day3"></tr>
-        <tr id="day4"></tr>
-        <tr id="day5"></tr>
-        <tr id="day6"></tr>
-    </table>
+      {{#calendarData}}
+        {{#name}}
+          <h3>{{name}} in C Major.</h3>
+        {{/name}}
 
-    <footer>
-      <a href="https://github.com/ajacksified/song-of-github">Get the code on Github.</a>
-      By <a href="http://twitter.com/ajacksified">@ajacksified</a>.
-      Uses the super cool <a href="http://mudcu.be/midi-js/">Midi.js</a>.
-    </footer>
+        <table id='visualize'>
+          <tr id='day0'></tr>
+          <tr id='day1'></tr>
+          <tr id='day2'></tr>
+          <tr id='day3'></tr>
+          <tr id='day4'></tr>
+          <tr id='day5'></tr>
+          <tr id='day6'></tr>
+        </table>
+
+        <p><a href='http://song-of-github.herokuapp.com?username={{name}}'>Share this.</a></p>
+      {{/calendarData}}
+
+      <footer>
+        <a href='https://github.com/ajacksified/song-of-github'>Get the code on Github.</a>
+        By <a href='http://twitter.com/ajacksified'>@ajacksified</a>.
+        Uses the super cool <a href='http://mudcu.be/midi-js/'>Midi.js</a>.
+      </footer>
 
     </section>
 
-    <script src="http://code.jquery.com/jquery-1.8.3.min.js" type="text/javascript"></script>
+    <script src='http://code.jquery.com/jquery-1.8.3.min.js' type='text/javascript'></script>
 
-    <script src="/js/MIDI.min.js" type="text/javascript"></script>
-    <script src="/js/base64binary.js" type="text/javascript"></script>
+    <script src='/js/MIDI.min.js' type='text/javascript'></script>
+    <script src='/js/base64binary.js' type='text/javascript'></script>
 
-    <script type="text/javascript">
+    <script type='text/javascript'>
       {{#calendarData}}
         var calendarData = {{{calendarData}}};
       {{/calendarData}}
       {{^calendarData}}
         var calendarData = [];
       {{/calendarData}}
-
-      var loader = new widgets.Loader,
-          weeks = [],
-          column = [],
-          mapping = {
-            "fill: #eeeeee;": 0,
-            "fill: #d6e685;": 1,
-            "fill: #8cc665;": 2,
-            "fill: #44a340;": 3,
-            "fill: #1e6823;": 4
-          },
-          $visualize = $("#visualize"),
-          $el, columns, column;
-
-      $(function(){
-        if(calendarData.length){
-          for(var i = 0; i < calendarData.length; i++){
-            contrib = calendarData[i][1];
-
-            if(contrib > 0){
-              if(contrib < 5){
-                contrib = 1;
-              }else if(contrib < 10){
-                contrib = 2;
-              }else if(contrib < 15){
-                contrib = 3;
-              }else {
-                contrib = 4;
-              }
-            }
-
-            column.push(contrib);
-
-            if(i > 0 && ((i+1) % 7 == 0)){
-              weeks.push(column);
-              column = [];
-            }
-          }
-
-          loadVisualization(weeks);
-          loadSong(weeks);
-        }
-      });
-
-      function updateTD(week, day){
-        $visualize.find("tr:eq(" + day + ") > td:eq(" + week + ")").css({ opacity: .25 });
-      }
-
-      function loadVisualization(weeks){
-        var days = [
-          $("#day0"),
-          $("#day1"),
-          $("#day2"),
-          $("#day3"),
-          $("#day4"),
-          $("#day5"),
-          $("#day6")
-        ];
-
-        for(var n = 0; n < weeks.length; n++){
-          for(var m = 0; m < weeks[n].length; m++){
-            days[m].append($("<td class='status" + weeks[n][m] + "'></td>"));
-          }
-        }
-      }
-
-      function loadSong(weeks){
-        MIDI.loadPlugin({
-          instruments: [ "acoustic_grand_piano" ],
-          callback: function() {
-            var delay, note, velocity;
-
-            loader.stop();
-            MIDI.programChange(0, 0);
-            MIDI.programChange(1, 118);
-
-            for(var n = 0; n < weeks.length; n++){
-              delay = n / 4; // play one chord every quarter second
-              note = MIDI.pianoKeyOffset + (4 + (12 * 4)) - 1; // the MIDI note
-              velocity = 47; // how hard the note hits
-
-              for(var m = 0; m < weeks[n].length; m++){
-                if(weeks[n][m] > 0){
-                  MIDI.noteOn(0, note + (weeks[n][m] * 2), velocity, delay + (m / 16));
-                }
-
-                window.setTimeout("updateTD("+ n + "," + m + ");", ((delay + (m / 16)) * 1000));
-              }
-            }
-          }
-        });
-      }
     </script>
 
-    <script type="text/javascript">
+    <script src='/js/index.js' type='text/javascript'></script>
+
+    <script type='text/javascript'>
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', 'UA-37501388-1']);
       _gaq.push(['_trackPageview']);
