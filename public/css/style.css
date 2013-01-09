@@ -1,0 +1,49 @@
+body {
+  font-family: 'Open Sans', sans-serif;
+  background: url('/images/pw_maze_white.png');
+}
+table {
+  margin: 1em 0;
+}
+td {
+  height: 7px;
+  width: 7px;
+  background: rgba(255, 255, 255, 0.25);
+}
+h1 {
+  font-size: 2em;
+  line-height: 1em;
+  margin-bottom: 0;
+}
+h2 {
+  font-size: 1.7em;
+  margin-top: .25em;
+  line-height: 1.25em;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: .5em;
+  padding-bottom: .5em;
+}
+footer {
+  border-top: solid 1px #ccc;
+  margin-top: 1em;
+  padding-top: 1em;
+}
+#main {
+  max-width: 800px;
+  margin: auto;
+}
+.status0 {
+  background: #eee;
+}
+.status1 {
+  background: #d6e685;
+}
+.status2 {
+  background: #8cc665;
+}
+.status3 {
+  background: #44a340;
+}
+.status4 {
+  background: #1e6823;
+}
