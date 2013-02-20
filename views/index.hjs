@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
 <html xmlns = 'http://www.w3.org/1999/xhtml'>
   <head>
-    <title>Song of Github - Let me sing you the song of my contributions.</title>
+    <title>Song of GitHub - Let me sing you the song of my contributions.</title>
 
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700' rel='stylesheet' type='text/css'>
     <link href='/css/style.css' rel='stylesheet' type='text/css'>
@@ -9,13 +9,13 @@
 
   <body>
     <section id='main'>
-      <h1>Song of Github</h1>
+      <h1>Song of GitHub</h1>
       <h2>Let me sing you the song of my contributions.</h2>
 
       <p>(Sound on, please.)</p>
 
       <form action='/' method='GET'>
-        <label for='username'>Github username:</label>
+        <label for='username'>GitHub username:</label>
         <input name='username' value='{{name}}' />
         <button type='submit'>Play that sassy jazz</button>
       </form>
@@ -39,7 +39,7 @@
       {{/calendarData}}
 
       <footer>
-        <a href='https://github.com/ajacksified/song-of-github'>Get the code on Github.</a>
+        <a href='https://github.com/ajacksified/song-of-github'>Get the code on GitHub.</a>
         By <a href='http://twitter.com/ajacksified'>@ajacksified</a>.
         Uses the super cool <a href='http://mudcu.be/midi-js/'>Midi.js</a>.
       </footer>
