@@ -9,10 +9,6 @@
         'fill: #44a340;': 3,
         'fill: #1e6823;': 4
       },
-      // Major(ish) scale
-      // notes = [0, 2, 4, 7, 9, 11, 12, 14, 16, 19, 21],
-      // Minor(ish)
-      notes = [0, 2, 3, 7, 10, 12, 14, 15, 19],
       calendarData = global.calendarData,
       $visualize;
 
@@ -20,11 +16,11 @@
     var weeks = [],
         column = [],
         i = 0,
-        contrib, mapped;
+        contrib;
 
     for(i; i < calendarData.length; i++){
-      mapped = 0;
       contrib = calendarData[i][1];
+      column.push(contrib);
       if(i > 0 && ((i+1) % 7 === 0)){
         weeks.push(column);
         column = [];
@@ -34,10 +30,8 @@
     return weeks;
   }
 
-  function updateTDAfter(week, day, time){
-    window.setTimeout(function () {
-      $visualize.find('tr:eq(' + day + ') > td:eq(' + week + ')').css({ opacity: 0.25 });
-    }, time);
+  function updateTD(week, day){
+    $visualize.find('tr:eq(' + day + ') > td:eq(' + week + ')').css({ opacity: 0.25 });
   }
 
   function loadVisualization(weeks){
@@ -55,7 +49,7 @@
 
     for(n; n < weeks.length; n++){
       for(m = 0; m < weeks[n].length; m++){
-        days[m].append($('<td class="status' + weeks[n][m].mapped + '"></td>'));
+        days[m].append($('<td class="status' + weeks[n][m] + '"></td>'));
       }
     }
   }
@@ -64,7 +58,7 @@
 
   function loadSong(weeks){
     MIDI.loadPlugin({
-      instruments: ['acoustic_grand_piano'],
+      instruments: [ 'acoustic_grand_piano' ],
       callback: function() {
         MIDI.programChange(0, 0);
         MIDI.programChange(1, 118);
@@ -96,8 +90,43 @@
     var arpeggio = week[0] > 0;
     var noteDelay;
 
+    for(var m = 0; m < week.length; m++){
+      if(week[m] > 0){
+        MIDI.noteOn(0, getNote(), getVelocity(), getDelay());
+        if (m > 5) {
+          MIDI.noteOn(0, getNote(), getVelocity(), getDelay() * 0.5);
         }
       }
+
+      (function(n, m){
+        window.setTimeout(function(){
+          updateTD(n,m)
+        }, noteDelay * 1000)
+      }(n, m));
+    }
+
+    function getChord() {
+      var l = chordMap.length;
+      return chords[chordMap[(sum ^ l) % (l - 1)]];
+    }
+
+    function getNote() {
+      var note = chord[m];
+      return (sum % 14 == 0) && (m % 3 == 0) ? note + 1 : note;
+    }
+
+    function getVelocity() {
+      return 20 + (m * 4);
+    }
+
+    function getDelay() {
+      if (arpeggio) {
+        noteDelay = delay + (m / chordMap.length - 1);
+      } else {
+       noteDelay = delay;
+      }
+      return noteDelay;
+    }
   }
 
   $(function(){
