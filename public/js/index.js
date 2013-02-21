@@ -1,6 +1,4 @@
 // weird thing with MIDI lib. vOv
-var loader = new widgets.Loader();
-
 !function(global, $, MIDI){
   'use strict';
 
@@ -82,7 +80,7 @@ var loader = new widgets.Loader();
 
   function loadSong(weeks){
     MIDI.loadPlugin({
-      instruments: [ 'acoustic_grand_piano' ],
+      instruments: ['acoustic_grand_piano'],
       callback: function() {
         var n = 0,
             m = 0,
@@ -95,7 +93,6 @@ var loader = new widgets.Loader();
         note = MIDI.pianoKeyOffset + (3 + (12 * 3)); // the MIDI note
         velocity = 50; // how hard the note hits
 
-        loader.stop();
         MIDI.programChange(0, 0);
         MIDI.programChange(1, 118);
 
