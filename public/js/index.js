@@ -25,24 +25,6 @@
     for(i; i < calendarData.length; i++){
       mapped = 0;
       contrib = calendarData[i][1];
-
-      if(contrib > 0){
-        if(contrib < 5){
-          mapped = 1;
-        }else if(contrib < 10){
-          mapped = 2;
-        }else if(contrib < 15){
-          mapped = 3;
-        }else {
-          mapped = 4;
-        }
-      }
-
-      column.push({
-        contrib: contrib,
-        mapped: mapped
-      });
-
       if(i > 0 && ((i+1) % 7 === 0)){
         weeks.push(column);
         column = [];
@@ -78,44 +60,44 @@
     }
   }
 
+  var n = 0, delay;
+
   function loadSong(weeks){
     MIDI.loadPlugin({
       instruments: ['acoustic_grand_piano'],
       callback: function() {
-        var n = 0,
-            m = 0,
-            // Comments are a guide, have a play
-            speed = 1.8, // 0.5 - 5
-            noteSpread = 0.05, // 0 - 0.5
-            rubato = 0.5, // 0 - 4
-            weekDelay, dayDelay, note, dayNote, dayRubato, velocity;
-
-        note = MIDI.pianoKeyOffset + (3 + (12 * 3)); // the MIDI note
-        velocity = 50; // how hard the note hits
-
         MIDI.programChange(0, 0);
         MIDI.programChange(1, 118);
 
         for(n; n < weeks.length; n++){
-          // play a new week with some rubato!
-          weekDelay = (n / speed) + (rubato * Math.random() - rubato);
-
-          for(m = 0; m < weeks[n].length; m++){
-            // Figure out some timings
-            dayNote = note + notes[weeks[n][m].contrib % notes.length];
-            dayRubato = noteSpread * Math.random();
-            dayDelay = weekDelay + (speed / 7) + dayRubato;
-
-            // Play it!
-            if(weeks[n][m].mapped > 0){
-              MIDI.noteOn(0, dayNote, velocity, dayDelay);
-            }
-
-            updateTDAfter(n, m, dayDelay * 1000);
-          }
+          delay = n;
+          playWeek(weeks[n], n);
         }
       }
     });
+  }
+
+  var chords = {
+    I:   [48, 52, 55, 60, 64, 67, 72],
+    ii:  [50, 53, 57, 62, 65, 69, 74],
+    iii: [52, 55, 59, 64, 67, 71, 76],
+    IV:  [41, 45, 48, 53, 57, 60, 65],
+    V:   [43, 47, 50, 55, 59, 62, 67],
+    vi:  [45, 48, 52, 57, 60, 64, 69],
+    vii: [47, 50, 53, 59, 62, 65, 71]
+  };
+
+  var chordMap = ['I', 'ii', 'iii', 'IV', 'vi', 'vii'];
+
+  function playWeek(week, n) {
+    var note = 60;
+    var sum = week.reduce(function(t, n) { return t + n; }, 0);
+    var chord = getChord();
+    var arpeggio = week[0] > 0;
+    var noteDelay;
+
+        }
+      }
   }
 
   $(function(){
