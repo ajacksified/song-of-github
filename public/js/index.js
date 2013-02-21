@@ -11,6 +11,10 @@ var loader = new widgets.Loader();
         'fill: #44a340;': 3,
         'fill: #1e6823;': 4
       },
+      // Major(ish) scale
+      notes = [0, 2, 4, 7, 9, 12, 14, 16, 19, 21],
+      // Minor(ish)
+      // notes = [0, 2, 3, 7, 12, 14, 15, 19],
       calendarData = global.calendarData,
       $visualize;
 
@@ -18,24 +22,28 @@ var loader = new widgets.Loader();
     var weeks = [],
         column = [],
         i = 0,
-        contrib;
+        contrib, mapped;
 
     for(i; i < calendarData.length; i++){
+      mapped = 0;
       contrib = calendarData[i][1];
 
       if(contrib > 0){
         if(contrib < 5){
-          contrib = 1;
+          mapped = 1;
         }else if(contrib < 10){
-          contrib = 2;
+          mapped = 2;
         }else if(contrib < 15){
-          contrib = 3;
+          mapped = 3;
         }else {
-          contrib = 4;
+          mapped = 4;
         }
       }
 
-      column.push(contrib);
+      column.push({
+        contrib: contrib,
+        mapped: mapped
+      });
 
       if(i > 0 && ((i+1) % 7 === 0)){
         weeks.push(column);
@@ -46,8 +54,10 @@ var loader = new widgets.Loader();
     return weeks;
   }
 
-  function updateTD(week, day){
-    $visualize.find('tr:eq(' + day + ') > td:eq(' + week + ')').css({ opacity: 0.25 });
+  function updateTDAfter(week, day, time){
+    window.setTimeout(function () {
+      $visualize.find('tr:eq(' + day + ') > td:eq(' + week + ')').css({ opacity: 0.25 });
+    }, time);
   }
 
   function loadVisualization(weeks){
@@ -65,7 +75,7 @@ var loader = new widgets.Loader();
 
     for(n; n < weeks.length; n++){
       for(m = 0; m < weeks[n].length; m++){
-        days[m].append($('<td class="status' + weeks[n][m] + '"></td>'));
+        days[m].append($('<td class="status' + weeks[n][m].mapped + '"></td>'));
       }
     }
   }
@@ -76,23 +86,35 @@ var loader = new widgets.Loader();
       callback: function() {
         var n = 0,
             m = 0,
-            delay, note, velocity;
+            // Comments are a guide, have a play
+            speed = 1.8, // 0.5 - 5
+            noteSpread = 0.05, // 0 - 0.5
+            rubato = 0.5, // 0 - 4
+            weekDelay, dayDelay, note, dayNote, dayRubato, velocity;
+
+        note = MIDI.pianoKeyOffset + (3 + (12 * 3)); // the MIDI note
+        velocity = 50; // how hard the note hits
 
         loader.stop();
         MIDI.programChange(0, 0);
         MIDI.programChange(1, 118);
 
         for(n; n < weeks.length; n++){
-          delay = n / 4; // play one chord every quarter second
-          note = MIDI.pianoKeyOffset + (4 + (12 * 3)) - 1; // the MIDI note
-          velocity = 47; // how hard the note hits
+          // play a new week with some rubato!
+          weekDelay = (n / speed) + (rubato * Math.random() - rubato);
 
           for(m = 0; m < weeks[n].length; m++){
-            if(weeks[n][m] > 0){
-              MIDI.noteOn(0, note + (weeks[n][m] * 4), velocity, delay + (m / 16));
+            // Figure out some timings
+            dayNote = note + notes[weeks[n][m].contrib % notes.length];
+            dayRubato = noteSpread * Math.random();
+            dayDelay = weekDelay + (speed / 7) + dayRubato;
+
+            // Play it!
+            if(weeks[n][m].mapped > 0){
+              MIDI.noteOn(0, dayNote, velocity, dayDelay);
             }
 
-            (function(n, m){ window.setTimeout(function(){ updateTD(n,m) }, ((delay + (m / 16)) * 1000)) }(n, m));
+            updateTDAfter(n, m, dayDelay * 1000);
           }
         }
       }
