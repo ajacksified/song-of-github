@@ -12,9 +12,9 @@ var loader = new widgets.Loader();
         'fill: #1e6823;': 4
       },
       // Major(ish) scale
-      notes = [0, 2, 4, 7, 9, 12, 14, 16, 19, 21],
+      // notes = [0, 2, 4, 7, 9, 11, 12, 14, 16, 19, 21],
       // Minor(ish)
-      // notes = [0, 2, 3, 7, 12, 14, 15, 19],
+      notes = [0, 2, 3, 7, 10, 12, 14, 15, 19],
       calendarData = global.calendarData,
       $visualize;
 
