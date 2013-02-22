@@ -20,10 +20,12 @@
         <button type='submit'>Play that sassy jazz</button>
       </form>
 
+
       {{#calendarData}}
         {{#name}}
           <h3>{{name}} in C Major.</h3>
         {{/name}}
+        <div id="chord"></div>
 
         <table id='visualize'>
           <tr id='day0'></tr>
@@ -37,6 +39,7 @@
 
         <p><a href='http://song-of-github.herokuapp.com?username={{name}}'>Share this.</a></p>
       {{/calendarData}}
+
 
       <footer>
         <a href='https://github.com/ajacksified/song-of-github'>Get the code on GitHub.</a>

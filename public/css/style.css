@@ -32,6 +32,12 @@ footer {
   max-width: 800px;
   margin: auto;
 }
+#chord {
+  float: right;
+  margin-right: 30px;
+  line-height: 80px;
+  font-size: 1.5em;
+}
 .status0 {
   background: #eee;
 }
