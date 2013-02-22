@@ -15,11 +15,12 @@
 
         <p>(Sound on, please.)</p>
 
-      <form action='/' method='GET'>
-        <label for='username'>(comma-separated) GitHub username(s):</label>
-        <input name='username' value='{{name}}' size=50 />
-        <button type='submit'>Play that sassy jazz</button>
-      </form>
+        <form action='/' method='GET'>
+          <label for='username'>(comma-separated) GitHub username(s):</label>
+          <input name='username' value='{{name}}' size=50 />
+          <button type='submit'>Play that sassy jazz</button>
+        </form>
+      {{/embeddable}}
 
       {{#calendarData}}
         <div id={{key}}>
@@ -39,6 +40,7 @@
         </div>
       {{/calendarData}}
 
+    {{^embeddable}}
       {{#namesString}}
         <p><h3><a href='/?username={{{namesString}}}'>Share this (all parts).</a></h3></p>
       {{/namesString}}

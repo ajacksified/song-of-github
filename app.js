@@ -58,7 +58,7 @@ app.get('/', function(req, res) {
           // don't push if it's an invalid username (invalid result)
         }
       }
-      res.render('index', { calendarData: returning, names: names, namesString: names.join(',')});
+      res.render('index', { calendarData: returning, names: names, namesString: names.join(','), embeddable: req.query.embeddable});
     });
   } else {
     res.render('index');
