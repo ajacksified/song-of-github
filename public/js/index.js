@@ -49,6 +49,10 @@
     $('#chord').text(chordName);
   }
 
+  function updateNoteName(noteName) {
+    $('#note').text(noteName);
+  }
+
   function loadVisualization(weeks){
     var days = [
       $('#day0'),
@@ -129,12 +133,13 @@
         }
       }
 
-      (function(n, m, chordName){
+      (function(n, m, chordName, noteName){
         window.setTimeout(function(){
           updateTD(n,m);
           updateChordName(chordName);
+          updateNoteName(noteName);
         }, noteDelay * 1000);
-      }(n, m, getChordName()));
+      }(n, m, getChordName(), getNoteName()));
     }
 
     function getChordName() {
@@ -144,6 +149,10 @@
 
     function getChord() {
       return chords[getChordName()];
+    }
+
+    function getNoteName() {
+      return getNote() - MIDI.pianoKeyOffset;
     }
 
     function getNote() {

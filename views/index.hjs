@@ -25,7 +25,6 @@
         {{#name}}
           <h3>{{name}} in C Major.</h3>
         {{/name}}
-        <div id="chord"></div>
 
         <table id='visualize'>
           <tr id='day0'></tr>
@@ -36,6 +35,8 @@
           <tr id='day5'></tr>
           <tr id='day6'></tr>
         </table>
+
+        <em>Play along: chord <span id="chord"></span>, <span id="note"></span></em>
 
         <p><a href='http://song-of-github.herokuapp.com?username={{name}}'>Share this.</a></p>
       {{/calendarData}}
