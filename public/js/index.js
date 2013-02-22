@@ -117,6 +117,7 @@
   };
 
   var chordMap = ['I', 'ii', 'iii', 'IV', 'vi', 'vii'];
+  var noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
   function playWeek(week, n) {
     var note = 60;
@@ -152,7 +153,7 @@
     }
 
     function getNoteName() {
-      return getNote() - MIDI.pianoKeyOffset;
+      return noteNames[(getNote() - MIDI.pianoKeyOffset) % 12];
     }
 
     function getNote() {
