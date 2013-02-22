@@ -7,7 +7,8 @@ var express = require('express'),
     routes = require('./routes'),
     http = require('http'),
     https = require('https'),
-    path = require('path');
+    path = require('path'),
+    async = require('async');
 
 var app = express();
 
@@ -28,17 +29,34 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-app.get('/', function(req, res){
-  if(req.query.username){
-    https.get('https://github.com/users/' + req.query.username + '/contributions_calendar_data', function(response) {
-      response.on('data', function(d){
-        res.render('index', { calendarData: d, name: req.query.username });
+getGitHubData = function(name) {
+  return function(callback) {
+    url = 'https://github.com/users/' + name + '/contributions_calendar_data';
+    https.get(url, function(response) {
+      response.on('data', function(d) {
+        callback(null, d);
       });
     });
-  }else{
+  }
+}
+
+app.get('/', function(req, res) {
+  if(req.query.username){
+    var names = req.query.username.split(','),
+        allQueries = [];
+    for (i in names) {
+      allQueries.push(getGitHubData(names[i]));
+    }
+    async.parallel(allQueries, function(err, results) {
+      var returning = [];
+      for (i = 0; i < names.length; i++) {
+        returning.push({'key' : names[i], 'value' : results[i] });
+      }
+      res.render('index', { calendarData: returning, names: names, namesString: names.join(',')});
+    });
+  } else {
     res.render('index');
   }
-
 });
 
 http.createServer(app).listen(app.get('port'), function(){
