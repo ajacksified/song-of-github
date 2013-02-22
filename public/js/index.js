@@ -143,7 +143,6 @@
     }
 
     function getChord() {
-      console.log(getChordName());
       return chords[getChordName()];
     }
 
