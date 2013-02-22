@@ -45,6 +45,10 @@
     $visualize.find('tr:eq(' + day + ') > td:eq(' + week + ')').css({ opacity: 0.25 });
   }
 
+  function updateChordName(chordName) {
+    $('#chord').text(chordName);
+  }
+
   function loadVisualization(weeks){
     var days = [
       $('#day0'),
@@ -125,16 +129,21 @@
         }
       }
 
-      (function(n, m){
+      (function(n, m, chordName){
         window.setTimeout(function(){
-          updateTD(n,m)
-        }, noteDelay * 1000)
-      }(n, m));
+          updateTD(n,m);
+          updateChordName(chordName);
+        }, noteDelay * 1000);
+      }(n, m, getChordName()));
+    }
+
+    function getChordName() {
+      var l = chordMap.length;
+      return chordMap[(sum ^ l) % (l - 1)];
     }
 
     function getChord() {
-      var l = chordMap.length;
-      return chords[chordMap[(sum ^ l) % (l - 1)]];
+      return chords[getChordName()];
     }
 
     function getNote() {
