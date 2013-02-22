@@ -27,7 +27,6 @@
           i++;
         }
       }
-      console.log(i);
 
       contrib = calendarData[i - dayOffset][1];
       column.push(contrib);
