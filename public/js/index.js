@@ -15,12 +15,24 @@
   function organizeData(calendarData){
     var weeks = [],
         column = [],
-        i = 0,
-        contrib;
+        d = new Date(calendarData[0][0]),
+        dayOffset = d.getDay(),
+        contrib, i, j, index;
 
-    for(i; i < calendarData.length; i++){
-      contrib = calendarData[i][1];
+    for(i = 0; i < calendarData.length; i++){
+      // offset by day of week; dates sent over don't necessarily start at monday
+      if(i == 0){
+        for(j = 0; j < dayOffset; j++){
+          column.push(0);
+          i++;
+        }
+      }
+      console.log(i);
+
+      contrib = calendarData[i - dayOffset][1];
       column.push(contrib);
+
+      // break on a new week
       if(i > 0 && ((i+1) % 7 === 0)){
         weeks.push(column);
         column = [];
@@ -64,6 +76,7 @@
             contrib = 4;
           }
         }
+
         days[m].append($('<td class="status' + contrib + '"></td>'));
       }
     }
