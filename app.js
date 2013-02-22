@@ -38,7 +38,7 @@ app.get('/', function(req, res){
           d = null;
         }
 
-        res.render('index', { calendarData: d, name: req.query.username });
+        res.render('index', { calendarData: d, name: req.query.username, embeddable: req.query.embeddable });
       });
     });
   }else{

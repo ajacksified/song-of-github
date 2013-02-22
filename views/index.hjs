@@ -9,16 +9,18 @@
 
   <body>
     <section id='main'>
-      <h1>Song of GitHub</h1>
-      <h2>Let me sing you the song of my contributions.</h2>
+      {{^embeddable}}
+        <h1>Song of GitHub</h1>
+        <h2>Let me sing you the song of my contributions.</h2>
 
-      <p>(Sound on, please.)</p>
+        <p>(Sound on, please.)</p>
 
-      <form action='/' method='GET'>
-        <label for='username'>GitHub username:</label>
-        <input name='username' value='{{name}}' />
-        <button type='submit'>Play that sassy jazz</button>
-      </form>
+        <form action='/' method='GET'>
+          <label for='username'>GitHub username:</label>
+          <input name='username' value='{{name}}' />
+          <button type='submit'>Play that sassy jazz</button>
+        </form>
+      {{/embeddable}}
 
       {{#calendarData}}
         {{#name}}
@@ -34,15 +36,21 @@
           <tr id='day5'></tr>
           <tr id='day6'></tr>
         </table>
-
-        <p><a href='http://song-of-github.herokuapp.com?username={{name}}'>Share this.</a></p>
       {{/calendarData}}
 
-      <footer>
-        <a href='https://github.com/ajacksified/song-of-github'>Get the code on GitHub.</a>
-        By <a href='http://twitter.com/ajacksified'>@ajacksified</a> and <a href='https://github.com/ajacksified/song-of-github/contributors'>some amazing contributors</a>.
-        Uses the super cool <a href='http://mudcu.be/midi-js/'>Midi.js</a>.
-      </footer>
+      {{^embeddable}}
+        <p><a href='http://song-of-github.herokuapp.com?username={{name}}'>Share your song.</a></p>
+
+        <footer>
+          <a href='https://github.com/ajacksified/song-of-github'>Get the code on GitHub.</a>
+          By <a href='http://twitter.com/ajacksified'>@ajacksified</a> and <a href='https://github.com/ajacksified/song-of-github/contributors'>some amazing contributors</a>.
+          Uses the super cool <a href='http://mudcu.be/midi-js/'>Midi.js</a>.
+        </footer>
+      {{/embeddable}}
+
+      {{#embeddable}}
+        <p><a href='http://song-of-github.herokuapp.com'>Listen to your song.</a></p>
+      {{/embeddable}}
 
     </section>
 
