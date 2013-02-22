@@ -6,9 +6,9 @@
     "start": "node app"
   },
   "dependencies": {
-    "express": "3.0.0rc3",
-    "hjs": "*",
-    "less-middleware": "*"
+    "express": "3.1.0",
+    "hjs": "0.0.4",
+    "less-middleware": "0.1.9"
   },
   "engines": {
     "node": ">= 0.8.11",
