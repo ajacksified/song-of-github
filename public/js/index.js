@@ -45,11 +45,26 @@
       $('#day6')
     ],
     n = 0,
-    m = 0;
+    m = 0,
+    contrib = 0;
 
     for(n; n < weeks.length; n++){
       for(m = 0; m < weeks[n].length; m++){
-        days[m].append($('<td class="status' + weeks[n][m] + '"></td>'));
+
+        contrib = weeks[n][m];
+
+        if(contrib > 0){
+          if(contrib < 5){
+            contrib = 1;
+          }else if(contrib < 10){
+            contrib = 2;
+          }else if(contrib < 15){
+            contrib = 3;
+          }else {
+            contrib = 4;
+          }
+        }
+        days[m].append($('<td class="status' + contrib + '"></td>'));
       }
     }
   }
