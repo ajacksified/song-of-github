@@ -42,7 +42,7 @@ getGitHubData = function(name) {
 
 app.get('/', function(req, res) {
   if(req.query.username){
-    var names = req.query.username.split(','),
+    var names = req.query.username.replace(/\s/g, '').split(','),
         allQueries = [];
     for (i in names) {
       allQueries.push(getGitHubData(names[i]));
