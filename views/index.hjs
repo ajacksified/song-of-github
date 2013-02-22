@@ -15,42 +15,44 @@
 
         <p>(Sound on, please.)</p>
 
-        <form action='/' method='GET'>
-          <label for='username'>GitHub username:</label>
-          <input name='username' value='{{name}}' />
-          <button type='submit'>Play that sassy jazz</button>
-        </form>
-      {{/embeddable}}
+      <form action='/' method='GET'>
+        <label for='username'>(comma-separated) GitHub username(s):</label>
+        <input name='username' value='{{name}}' size=50 />
+        <button type='submit'>Play that sassy jazz</button>
+      </form>
 
       {{#calendarData}}
-        {{#name}}
-          <h3>{{name}} in C Major.</h3>
-        {{/name}}
+        <div id={{key}}>
+          <h3>{{key}} in C Major.</h3>
 
-        <table id='visualize'>
-          <tr id='day0'></tr>
-          <tr id='day1'></tr>
-          <tr id='day2'></tr>
-          <tr id='day3'></tr>
-          <tr id='day4'></tr>
-          <tr id='day5'></tr>
-          <tr id='day6'></tr>
-        </table>
+          <table id='visualize'>
+            <tr id='day0'></tr>
+            <tr id='day1'></tr>
+            <tr id='day2'></tr>
+            <tr id='day3'></tr>
+            <tr id='day4'></tr>
+            <tr id='day5'></tr>
+            <tr id='day6'></tr>
+          </table>
+
+          <p><a href='/?username={{key}}'>Share this (solo).</a></p>
+        </div>
       {{/calendarData}}
 
-      {{^embeddable}}
-        <p><a href='http://song-of-github.herokuapp.com?username={{name}}'>Share your song.</a></p>
+      {{#namesString}}
+        <p><h3><a href='/?username={{{namesString}}}'>Share this (all parts).</a></h3></p>
+      {{/namesString}}
 
-        <footer>
-          <a href='https://github.com/ajacksified/song-of-github'>Get the code on GitHub.</a>
-          By <a href='http://twitter.com/ajacksified'>@ajacksified</a> and <a href='https://github.com/ajacksified/song-of-github/contributors'>some amazing contributors</a>.
-          Uses the super cool <a href='http://mudcu.be/midi-js/'>Midi.js</a>.
-        </footer>
-      {{/embeddable}}
+      <footer>
+        <a href='https://github.com/ajacksified/song-of-github'>Get the code on GitHub.</a>
+        By <a href='http://twitter.com/ajacksified'>@ajacksified</a> and <a href='https://github.com/ajacksified/song-of-github/contributors'>some amazing contributors</a>.
+        Uses the super cool <a href='http://mudcu.be/midi-js/'>Midi.js</a>.
+      </footer>
+    {{/embeddable}}
 
-      {{#embeddable}}
-        <p><a href='http://song-of-github.herokuapp.com'>Listen to your song.</a></p>
-      {{/embeddable}}
+    {{#embeddable}}
+      <p><a href='http://song-of-github.herokuapp.com'>Listen to your song.</a></p>
+    {{/embeddable}}
 
     </section>
 
@@ -60,11 +62,10 @@
     <script src='/js/base64binary.js' type='text/javascript'></script>
 
     <script type='text/javascript'>
+      var names = [];
       {{#calendarData}}
-        var calendarData = {{{calendarData}}};
-      {{/calendarData}}
-      {{^calendarData}}
-        var calendarData = [];
+        {{key}} = {{{value}}};
+        names.push("{{key}}");
       {{/calendarData}}
     </script>
 
@@ -84,4 +85,3 @@
     </script>
   </body>
 </html>
-

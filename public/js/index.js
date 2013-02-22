@@ -9,8 +9,7 @@
         'fill: #44a340;': 3,
         'fill: #1e6823;': 4
       },
-      calendarData = global.calendarData,
-      $visualize;
+      names = global.names;
 
   function organizeData(calendarData){
     var weeks = [],
@@ -41,19 +40,19 @@
     return weeks;
   }
 
-  function updateTD(week, day){
-    $visualize.find('tr:eq(' + day + ') > td:eq(' + week + ')').css({ opacity: 0.25 });
+  function updateTD(week, day, name){
+    $('#' + name + ' #visualize').find('tr:eq(' + day + ') > td:eq(' + week + ')').css({ opacity: 0.25 });
   }
 
-  function loadVisualization(weeks){
+  function loadVisualization(weeks, name){
     var days = [
-      $('#day0'),
-      $('#day1'),
-      $('#day2'),
-      $('#day3'),
-      $('#day4'),
-      $('#day5'),
-      $('#day6')
+      $('#' + name + ' #day0'),
+      $('#' + name + ' #day1'),
+      $('#' + name + ' #day2'),
+      $('#' + name + ' #day3'),
+      $('#' + name + ' #day4'),
+      $('#' + name + ' #day5'),
+      $('#' + name + ' #day6')
     ],
     n = 0,
     m = 0,
@@ -81,7 +80,7 @@
     }
   }
 
-  var n = 0, delay;
+  var n = 0, i = 0, delay;
 
   function loadSong(weeks){
     MIDI.loadPlugin({
@@ -90,9 +89,11 @@
         MIDI.programChange(0, 0);
         MIDI.programChange(1, 118);
 
-        for(n; n < weeks.length; n++){
+        for(n; n < weeks[0].length; n++){
           delay = n;
-          playWeek(weeks[n], n);
+          for (i in weeks) {
+            playWeek(weeks[i][n], n, names[i]);
+          }
         }
       }
     });
@@ -110,7 +111,7 @@
 
   var chordMap = ['I', 'ii', 'iii', 'IV', 'vi', 'vii'];
 
-  function playWeek(week, n) {
+  function playWeek(week, n, name) {
     var note = 60;
     var sum = week.reduce(function(t, n) { return t + n; }, 0);
     var chord = getChord();
@@ -125,11 +126,11 @@
         }
       }
 
-      (function(n, m){
+      (function(n, m, name){
         window.setTimeout(function(){
-          updateTD(n,m)
+          updateTD(n,m,name)
         }, noteDelay * 1000)
-      }(n, m));
+      }(n, m,name));
     }
 
     function getChord() {
@@ -157,14 +158,14 @@
   }
 
   $(function(){
-    var weeks;
+    var weeks, i;
+    var allWeeks = [];
 
-    $visualize = $('#visualize');
-
-    if(calendarData.length > 0){
-      weeks = organizeData(calendarData);
-      loadVisualization(weeks);
-      loadSong(weeks);
+    for (i = 0; i < names.length; i++) {
+      weeks = organizeData(window[names[i]]);
+      loadVisualization(weeks, names[i]);
+      allWeeks.push(weeks)
     }
+    loadSong(allWeeks);
   });
 }(this, jQuery, MIDI);
