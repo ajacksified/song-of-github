@@ -34,7 +34,12 @@ getGitHubData = function(name) {
     url = 'https://github.com/users/' + name + '/contributions_calendar_data';
     https.get(url, function(response) {
       response.on('data', function(d) {
-        callback(null, d);
+        try{
+          JSON.parse(d);
+          callback(null, d);
+        }catch(e){
+          callback("invalid username");
+        }
       });
     });
   }
@@ -49,16 +54,10 @@ app.get('/', function(req, res) {
     }
     async.parallel(allQueries, function(err, results) {
       var returning = [];
-
       for (i = 0; i < names.length; i++) {
-        try{
-          JSON.parse(results[i]);
-          returning.push({'key' : names[i], 'value' : results[i] });
-        }catch(e){
-          // don't push if it's an invalid username (invalid result)
-        }
+        returning.push({'key' : names[i], 'value' : results[i] });
       }
-      res.render('index', { calendarData: returning, names: names, namesString: names.join(','), embeddable: req.query.embeddable});
+      res.render('index', { calendarData: returning, names: names, namesString: names.join(',')});
     });
   } else {
     res.render('index');
