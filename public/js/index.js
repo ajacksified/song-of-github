@@ -166,6 +166,8 @@
       loadVisualization(weeks, names[i]);
       allWeeks.push(weeks)
     }
-    loadSong(allWeeks);
+    if (allWeeks.length > 0) {
+      loadSong(allWeeks);
+    }
   });
 }(this, jQuery, MIDI);
