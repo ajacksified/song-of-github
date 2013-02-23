@@ -45,9 +45,9 @@
       {{/calendarData}}
 
     {{^embeddable}}
-      {{#namesString}}
+      {{#names}}
         <p><h3><a href='/?username={{{namesString}}}'>Share this (all parts).</a></h3></p>
-      {{/namesString}}
+      {{/names}}
 
       <footer>
         <a href='https://github.com/ajacksified/song-of-github'>Get the code on GitHub.</a>
