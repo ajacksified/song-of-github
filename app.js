@@ -63,7 +63,7 @@ app.get('/', function(req, res) {
           invalidNames.push(names[i]);
         }
       }
-      res.render('index', { calendarData: returning, names: validNames,
+      res.render('index', { calendarData: returning, names: validNames, anyValidNames: validNames.length > 0,
         namesString: validNames.join(','), invalidNames: invalidNames.join(','),
         embeddable: req.query.embeddable});
     });
