@@ -33,14 +33,13 @@ getGitHubData = function(name) {
   return function(callback) {
     url = 'https://github.com/users/' + name + '/contributions_calendar_data';
     https.get(url, function(response) {
-      response.on('data', function(d) {
-        try{
-          JSON.parse(d);
+      if (response.statusCode == '200') {
+        response.on('data', function(d) {
           callback(null, d);
-        }catch(e){
-          callback("invalid username");
-        }
-      });
+        });
+      } else {
+        callback(null, 'invalid');
+      }
     });
   }
 }
@@ -53,11 +52,20 @@ app.get('/', function(req, res) {
       allQueries.push(getGitHubData(names[i]));
     }
     async.parallel(allQueries, function(err, results) {
-      var returning = [];
+      var returning = [],
+          validNames = [],
+          invalidNames = [];
       for (i = 0; i < names.length; i++) {
-        returning.push({'key' : names[i], 'value' : results[i] });
+        if (results[i] != 'invalid') {
+          returning.push({'key' : names[i], 'value' : results[i] });
+          validNames.push(names[i]);
+        } else {
+          invalidNames.push(names[i]);
+        }
       }
-      res.render('index', { calendarData: returning, names: names, namesString: names.join(',')});
+      res.render('index', { calendarData: returning, names: validNames,
+        namesString: validNames.join(','), invalidNames: invalidNames.join(','),
+        embeddable: req.query.embeddable});
     });
   } else {
     res.render('index');
