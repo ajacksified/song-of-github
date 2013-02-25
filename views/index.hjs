@@ -64,11 +64,16 @@
     <script src='/js/base64binary.js' type='text/javascript'></script>
 
     <script type='text/javascript'>
-      var names = [];
+      var names = [], data;
       {{#calendarData}}
-        {{key}} = {{{value}}};
         names.push("{{key}}");
       {{/calendarData}}
+
+      data = {
+        {{#calendarData}}
+        "{{key}}": {{{value}}},
+        {{/calendarData}}
+      };
     </script>
 
     <script src='/js/index.js' type='text/javascript'></script>

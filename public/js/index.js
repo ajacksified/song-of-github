@@ -162,10 +162,11 @@
     var allWeeks = [];
 
     for (i = 0; i < names.length; i++) {
-      weeks = organizeData(window[names[i]]);
+      weeks = organizeData(global.data[names[i]]);
       loadVisualization(weeks, names[i]);
       allWeeks.push(weeks)
     }
+
     if (allWeeks.length > 0) {
       loadSong(allWeeks);
     }
