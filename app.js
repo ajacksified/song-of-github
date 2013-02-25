@@ -53,19 +53,22 @@ app.get('/', function(req, res) {
     }
     async.parallel(allQueries, function(err, results) {
       var returning = [],
-          validNames = [],
-          invalidNames = [];
+          validNames = [];
+
       for (i = 0; i < names.length; i++) {
         if (results[i] != 'invalid') {
           returning.push({'key' : names[i], 'value' : results[i] });
           validNames.push(names[i]);
-        } else {
-          invalidNames.push(names[i]);
         }
       }
-      res.render('index', { calendarData: returning, names: validNames, anyValidNames: validNames.length > 0,
-        namesString: validNames.join(','), invalidNames: invalidNames.join(','),
-        embeddable: req.query.embeddable});
+
+      res.render('index', {
+        calendarData: returning,
+        names: validNames,
+        anyValidNames: validNames.length > 0,
+        namesString: validNames.join(','),
+        embeddable: req.query.embeddable
+      });
     });
   } else {
     res.render('index');

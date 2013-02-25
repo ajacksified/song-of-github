@@ -22,10 +22,6 @@
         </form>
       {{/embeddable}}
 
-      {{#invalidNames}}
-        <p>These usernames are invalid and were not included: {{{invalidNames}}}</p>
-      {{/invalidNames}}
-
       {{#calendarData}}
         <div id={{key}}>
           <h3>{{key}} in C Major.</h3>
