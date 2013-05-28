@@ -67,7 +67,8 @@ app.get('/', function(req, res) {
         names: validNames,
         anyValidNames: validNames.length > 0,
         namesString: validNames.join(','),
-        embeddable: req.query.embeddable
+        embeddable: req.query.embeddable,
+        playbutton: req.query.playbutton
       });
     });
   } else {

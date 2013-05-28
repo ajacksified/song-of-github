@@ -1,7 +1,8 @@
 // weird thing with MIDI lib. vOv
-!function(global, $, MIDI){
+var songOfGitHub = function(global, $, MIDI){
   'use strict';
 
+  var allWeeks = [];
   var mapping = {
         'fill: #eeeeee;': 0,
         'fill: #d6e685;': 1,
@@ -155,20 +156,48 @@
       }
       return noteDelay;
     }
-  }
+  };
 
-  $(function(){
-    var weeks, i;
-    var allWeeks = [];
-
-    for (i = 0; i < names.length; i++) {
-      weeks = organizeData(global.data[names[i]]);
-      loadVisualization(weeks, names[i]);
-      allWeeks.push(weeks)
-    }
-
+  function playSong() {
     if (allWeeks.length > 0) {
       loadSong(allWeeks);
     }
-  });
+    return false;
+  };
+
+  function showVisualization() {
+    if (allWeeks.length == 0) {
+      var weeks, i;
+      for (i = 0; i < names.length; i++) {
+        weeks = organizeData(global.data[names[i]]);
+        loadVisualization(weeks, names[i]);
+        allWeeks.push(weeks)
+      }
+    }
+  };
+
+  function buildPlayButton() {
+   var playButton = jQuery('<a/>', {
+      href: '#',
+      html: '&rtrif; Click to play'
+    })
+    playButton.click(function(e){
+      songOfGitHub.playSong();
+    });
+    playButton.insertAfter('#visualize');
+  }
+
+  function init(autoPlay) {
+    showVisualization();
+    if(autoPlay) {
+      playSong();
+    } else {
+      buildPlayButton();
+    }
+  };
+
+  return {
+    init: init,
+    playSong: playSong
+  }
 }(this, jQuery, MIDI);
