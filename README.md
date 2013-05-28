@@ -13,4 +13,6 @@ To embed it on your site:
 
     <iframe src="http://song-of-github.herokuapp.com/?username={{name}}&embeddable" height="240" width="600"></iframe>
 
+To display a `click to play` button, add `&playbutton` to the querystring.
+
 MIT licensed. See LICENSE file.
