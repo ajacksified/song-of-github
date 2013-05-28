@@ -177,13 +177,12 @@ var songOfGitHub = function(global, $, MIDI){
   };
 
   function buildPlayButton() {
-   var playButton = jQuery('<a/>', {
-      href: '#',
-      html: '&rtrif; Click to play'
-    })
+   var playButton = jQuery('<button>&rtrif; Click to play</button>');
+
     playButton.click(function(e){
       songOfGitHub.playSong();
     });
+
     playButton.insertAfter('#visualize');
   }
 
