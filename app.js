@@ -1,66 +1,67 @@
-
-/**
- * Module dependencies.
- */
-
 var express = require('express'),
-    routes = require('./routes'),
-    http = require('http'),
     https = require('https'),
-    path = require('path'),
-    async = require('async');
+    Q = require('q');
 
 var app = express();
 
-app.configure(function(){
-  app.set('port', process.env.PORT || 4000);
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'hjs');
-  app.use(express.favicon());
-  app.use(express.logger('dev'));
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
-  app.use(require('less-middleware')({ src: __dirname + '/public' }));
-  app.use(express.static(path.join(__dirname, 'public')));
-});
+app.set('port', process.env.PORT || 4000);
+app.set('views', __dirname + '/views');
+app.set('view engine', 'hjs');
+app.use(express.favicon());
+app.use(express.bodyParser());
+app.use(express.static('./public'));
+app.use(app.router);
 
 app.configure('development', function(){
   app.use(express.errorHandler());
+  app.use(express.logger('dev'));
 });
 
 getGitHubData = function(name) {
-  return function(callback) {
-    url = 'https://github.com/users/' + name + '/contributions_calendar_data';
-    https.get(url, function(response) {
-      if (response.statusCode == '200') {
-        response.on('data', function(d) {
-          callback(null, d);
-        });
-      } else {
-        callback(null, 'invalid');
-      }
+  var deferred = Q.defer(),
+      url = 'https://github.com/users/' + name + '/contributions_calendar_data';
+
+  https.get(url, function(res) {
+    var body = '';
+
+    res.on('data', function(chunk) {
+      body += chunk;
     });
-  }
+
+    res.on('end', function() {
+      deferred.resolve(body);
+    });
+  }).on('error', function(e) {
+    deferred.reject(e.message)
+  });
+
+  return deferred.promise;
 }
 
 app.get('/', function(req, res) {
   if(req.query.username){
     var names = req.query.username.replace(/\s/g, '').split(','),
-        allQueries = [];
-    for (i in names) {
-      allQueries.push(getGitHubData(names[i]));
-    }
-    async.parallel(allQueries, function(err, results) {
+        promises = [],
+        promise;
+
+    names.forEach(function(name){
+      promises.push(getGitHubData(name));
+    });
+
+    promise = Q.allSettled(promises);
+
+    promise.then(function(results) {
       var returning = [],
           validNames = [];
 
-      for (i = 0; i < names.length; i++) {
+      names.forEach(function(name, i){
         if (results[i] != 'invalid') {
-          returning.push({'key' : names[i], 'value' : results[i] });
-          validNames.push(names[i]);
+          returning.push({ key: name, value: results[i].value });
+          validNames.push(name);
         }
-      }
+      });
+
+      console.log(returning);
 
       res.render('index', {
         calendarData: returning,
@@ -70,12 +71,14 @@ app.get('/', function(req, res) {
         embeddable: req.query.embeddable,
         playbutton: req.query.playbutton
       });
-    });
+    }).fail(function(){
+      res.render('index');
+    });;
   } else {
     res.render('index');
   }
 });
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log("Express server listening on port " + app.get('port'));
-});
+app.listen(app.get('port'));
+console.log('Express server listening on port ' + app.get('port'));
+
