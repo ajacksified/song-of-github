@@ -61,8 +61,6 @@ app.get('/', function(req, res) {
         }
       });
 
-      console.log(returning);
-
       res.render('index', {
         calendarData: returning,
         names: validNames,

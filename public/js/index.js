@@ -85,7 +85,8 @@ var songOfGitHub = function(global, $, MIDI){
 
   function loadSong(weeks){
     MIDI.loadPlugin({
-      instruments: [ 'acoustic_grand_piano' ],
+      soundfontUrl: "./soundfont/",
+      instrument: "acoustic_grand_piano",
       callback: function() {
         MIDI.programChange(0, 0);
         MIDI.programChange(1, 118);
