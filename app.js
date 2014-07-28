@@ -12,7 +12,7 @@ app.use(express.bodyParser());
 app.use(express.static('./public'));
 app.use(app.router);
 
-app.configure('development', function(){
+app.configure('development', function() {
   app.use(express.errorHandler());
   app.use(express.logger('dev'));
 });
@@ -32,11 +32,11 @@ getGitHubData = function(name) {
       deferred.resolve(body);
     });
   }).on('error', function(e) {
-    deferred.reject(e.message)
+    deferred.reject(e.message);
   });
 
   return deferred.promise;
-}
+};
 
 app.get('/', function(req, res) {
   if(req.query.username){
@@ -54,7 +54,7 @@ app.get('/', function(req, res) {
       var returning = [],
           validNames = [];
 
-      names.forEach(function(name, i){
+      names.forEach(function(name, i) {
         if (results[i] != 'invalid') {
           returning.push({ key: name, value: results[i].value });
           validNames.push(name);
@@ -71,7 +71,7 @@ app.get('/', function(req, res) {
       });
     }).fail(function(){
       res.render('index');
-    });;
+    });
   } else {
     res.render('index');
   }
