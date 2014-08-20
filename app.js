@@ -19,7 +19,7 @@ app.configure('development', function() {
 
 getGitHubData = function(name) {
   var deferred = Q.defer(),
-      url = 'https://github.com/users/' + name + '/contributions_calendar_data';
+      url = 'https://github.com/users/' + name + '/contributions';
 
   https.get(url, function(res) {
     var body = '';
