@@ -12,8 +12,9 @@ var songOfGitHub = function(global, $, MIDI){
       },
       names = global.names;
 
-  // Returns contributions data parsed from a jQuery list of `<rect>` elements
-  // from a GitHub contributions SVG element.
+  // Returns contributions data parsed from a jQuery element containing `.day`
+  // descendants with `data-date` and `data-count` attributes corresponding to a
+  // user's contributions.
   //
   // Example return value:
   //
@@ -22,8 +23,8 @@ var songOfGitHub = function(global, $, MIDI){
   //       ["2014-09-02", 3],
   //       ...
   //     ]
-  function parseSvgData($svgEl) {
-    return $.map($svgEl.find(".day"), function (dayEl) {
+  function parseSvgData($svgWrapper) {
+    return $.map($svgWrapper.find(".day"), function (dayEl) {
       var $dayEl = $(dayEl);
       return [[$dayEl.data("date"), $dayEl.data("count")]];
     });
