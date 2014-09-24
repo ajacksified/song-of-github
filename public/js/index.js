@@ -12,7 +12,24 @@ var songOfGitHub = function(global, $, MIDI){
       },
       names = global.names;
 
-  function organizeData(calendarData){
+  // Returns contributions data parsed from a jQuery list of `<rect>` elements
+  // from a GitHub contributions SVG element.
+  //
+  // Example return value:
+  //
+  //     [
+  //       ["2014-09-01", 15],
+  //       ["2014-09-02", 3],
+  //       ...
+  //     ]
+  function parseSvgData($svgEl) {
+    return $.map($svgEl.find(".day"), function (dayEl) {
+      var $dayEl = $(dayEl);
+      return [[$dayEl.data("date"), $dayEl.data("count")]];
+    });
+  }
+
+  function organizeData(calendarData) {
     var weeks = [],
         column = [],
         d = new Date(calendarData[0][0]),
@@ -167,13 +184,12 @@ var songOfGitHub = function(global, $, MIDI){
   };
 
   function showVisualization() {
-    if (allWeeks.length == 0) {
-      var weeks, i;
-      for (i = 0; i < names.length; i++) {
-        weeks = organizeData(global.data[names[i]]);
-        loadVisualization(weeks, names[i]);
+    if (allWeeks.length === 0) {
+      names.forEach(function(name) {
+        var weeks = organizeData(parseSvgData($("#" + name + "-data")));
+        loadVisualization(weeks, name);
         allWeeks.push(weeks)
-      }
+      });
     }
   };
 
