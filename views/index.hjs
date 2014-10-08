@@ -64,17 +64,21 @@
     <script src='/js/Base64.js'></script>
     <script src='/js/base64binary.js'></script>
 
+    {{! Dump GitHub SVG data into the DOM to let the user's browser do the
+        parsing. A user's SVG is accessible with the selector "#{user}-data".}}
+    <div style="display:none;">
+      {{#calendarData}}
+        <div id="{{key}}-data">
+          {{{value}}}
+        </div>
+      {{/calendarData}}
+    </div>
+
     <script>
-      var names = [], data;
+      var names = [];
       {{#calendarData}}
         names.push("{{key}}");
       {{/calendarData}}
-
-      data = {
-        {{#calendarData}}
-        "{{key}}": {{{value}}},
-        {{/calendarData}}
-      };
     </script>
 
     <script src='/js/index.js'></script>
