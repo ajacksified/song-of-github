@@ -11,14 +11,7 @@ require("expose?atob&btoa!exports?atob&btoa!./Base64.js");
 var MIDI = require("exports?MIDI!script!./MIDI.min.js");
 
 var allWeeks = [];
-var mapping = {
-      'fill: #eeeeee;': 0,
-      'fill: #d6e685;': 1,
-      'fill: #8cc665;': 2,
-      'fill: #44a340;': 3,
-      'fill: #1e6823;': 4
-    },
-    names = global.names;
+var names = global.names;
 
 // Returns contributions data parsed from a jQuery element containing `.day`
 // descendants with `data-date` and `data-count` attributes corresponding to a
@@ -43,7 +36,7 @@ function organizeData(calendarData) {
       column = [],
       d = new Date(calendarData[0][0]),
       dayOffset = d.getDay(),
-      contrib, i, j, index;
+      contrib, i, j;
 
   for(i = 0; i < calendarData.length; i++){
     // offset by day of week; dates sent over don't necessarily start at monday
@@ -140,7 +133,6 @@ var chords = {
 var chordMap = ['I', 'ii', 'iii', 'IV', 'vi', 'vii'];
 
 function playWeek(week, n, name) {
-  var note = 60;
   var sum = week.reduce(function(t, n) { return t + n; }, 0);
   var chord = getChord();
   var arpeggio = week[0] > 0;
@@ -205,7 +197,7 @@ function showVisualization() {
 function buildPlayButton() {
  var playButton = jQuery('<button>&rtrif; Click to play</button>');
 
-  playButton.click(function(e){
+  playButton.click(function(){
     songOfGitHub.playSong();
   });
 
