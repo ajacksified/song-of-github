@@ -7,6 +7,8 @@ var app = express();
 app.set('port', process.env.PORT || 4000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'hjs');
+
+app.use(express.compress());
 app.use(express.favicon());
 app.use(express.bodyParser());
 app.use(express.static('./public'));
@@ -79,4 +81,3 @@ app.get('/', function(req, res) {
 
 app.listen(app.get('port'));
 console.log('Express server listening on port ' + app.get('port'));
-
