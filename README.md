@@ -25,19 +25,18 @@ To embed it on your site:
 1. Install dependencies
 
         npm install
-2. Watch JS changes
-
-        webpack --colors --watch
-3. Run & watch app for changes
-
         npm install supervisor -g
-        supervisor app.js
+2. Run & watch app for changes
+
+        npm run watch
+
+Kill the server with `Ctrl + C`.
 
 #### Checking in Client Changes
 
 1. Compile the JS for production
 
-        webpack -p
+        npm run build
 2. Be sure to check in `bundle.js`, which should change if you made changes to
    any client JS.
 
