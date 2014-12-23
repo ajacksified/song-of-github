@@ -1,9 +1,11 @@
 {
-  "name": "application-name",
+  "name": "song-of-github",
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node app"
+    "build": "webpack -p",
+    "start": "node app",
+    "watch": "(webpack --colors --watch &) ; (supervisor app)"
   },
   "dependencies": {
     "express": "~3.4.6",
@@ -12,6 +14,12 @@
   },
   "engines": {
     "node": ">= 0.8.11",
-    "npm":  ">= 1.1.49"
+    "npm": ">= 1.1.49"
+  },
+  "devDependencies": {
+    "exports-loader": "^0.6.2",
+    "expose-loader": "^0.6.0",
+    "script-loader": "^0.6.0",
+    "webpack": "^1.4.13"
   }
 }
