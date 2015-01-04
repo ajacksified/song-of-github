@@ -169,10 +169,11 @@ function playWeek(week, n, name) {
 
   function getDelay() {
     if (arpeggio) {
-      noteDelay = delay + (m / chordMap.length - 1);
+      noteDelay = delay + (m / (chordMap.length - 1));
     } else {
      noteDelay = delay;
     }
+
     return noteDelay;
   }
 };
